@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartCivic Admin</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="sc-nav">
+  <div class="sc-nav-brand">
+    <span class="dot"></span>
+    Smart<span class="brand-accent">Civic</span>
+    <span style="font-size:11px; font-family:var(--font-body); font-weight:500; color:var(--slate); background:var(--navy-light); border:1px solid var(--border); border-radius:4px; padding:2px 8px; margin-left:4px;">ADMIN</span>
+  </div>
+  <div class="sc-nav-actions">
+    <button id="adminLogoutBtn" class="btn-ghost btn-sm">
+      <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"/>
+      </svg>
+      Logout
+    </button>
+  </div>
+</nav>
+
+<div class="sc-container" style="padding-top:32px; padding-bottom:56px;">
+
+  <!-- Page title -->
+  <div class="sc-fade-up" style="margin-bottom:28px;">
+    <h1 style="font-size:1.5rem; margin-bottom:6px;">Admin Panel</h1>
+    <p style="font-size:14px; color:var(--slate);">Manage, prioritise, and resolve citizen complaints across the city.</p>
+  </div>
+
+  <!-- Stats Row -->
+  <div id="statsContainer" class="sc-fade-up" style="display:flex; gap:14px; margin-bottom:28px; flex-wrap:wrap; animation-delay:0.06s;">
+    <div class="statCard">
+      <h3>Total</h3>
+      <p id="totalComplaints">—</p>
+    </div>
+    <div class="statCard">
+      <h3>Pending</h3>
+      <p id="pendingComplaints">—</p>
+    </div>
+    <div class="statCard">
+      <h3>Awaiting</h3>
+      <p id="awaitingComplaints">—</p>
+    </div>
+    <div class="statCard">
+      <h3>Resolved</h3>
+      <p id="resolvedComplaints">—</p>
+    </div>
+    <div class="statCard">
+      <h3>Top Issue</h3>
+      <p id="topCategory" style="font-size:0.95rem; padding-top:4px;">—</p>
+    </div>
+  </div>
+
+  <!-- Map Section -->
+  <div class="sc-fade-up" style="animation-delay:0.12s; margin-bottom:28px;">
+    <div class="sc-section-header">
+      <div class="sc-section-title">Complaint Map</div>
+      <div style="display:flex; gap:8px; align-items:center;">
+        <!-- Map legend -->
+        <div style="display:flex; gap:10px; font-size:11px; color:var(--slate);">
+          <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:50%;background:#f59e0b;display:inline-block;"></span>Pending</span>
+          <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:50%;background:#3b82f6;display:inline-block;"></span>In Progress</span>
+          <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:50%;background:#8b5cf6;display:inline-block;"></span>Awaiting</span>
+          <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:50%;background:#10b981;display:inline-block;"></span>Resolved</span>
+        </div>
+      </div>
+    </div>
+    <div id="adminMap" style="height:420px; border-radius:var(--radius-lg); overflow:hidden;"></div>
+  </div>
+
+  <!-- Complaints Table -->
+  <div class="sc-fade-up" style="animation-delay:0.18s;">
+    <div class="sc-section-header">
+      <div class="sc-section-title">All Complaints</div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <select id="statusFilter" style="background:var(--navy-card); border:1px solid var(--border); color:var(--white); border-radius:8px; padding:6px 12px; font-size:13px;">
+          <option value="all">All Statuses</option>
+          <option value="pending">Pending</option>
+          <option value="in_progress">In Progress</option>
+          <option value="awaiting_confirmation">Awaiting Confirmation</option>
+          <option value="resolved">Resolved</option>
+        </select>
+        <select id="categoryFilter" style="background:var(--navy-card); border:1px solid var(--border); color:var(--white); border-radius:8px; padding:6px 12px; font-size:13px;">
+          <option value="all">All Categories</option>
+          <option value="Road Issues">Road Issues</option>
+          <option value="Streetlight">Streetlight</option>
+          <option value="Garbage / Sanitation">Garbage / Sanitation</option>
+          <option value="Water Leakage">Water Leakage</option>
+          <option value="Drainage">Drainage</option>
+          <option value="Public Property Damage">Public Property Damage</option>
+          <option value="Illegal Dumping">Illegal Dumping</option>
+          <option value="Encroachment">Encroachment</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+    </div>
+    <div class="sc-table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Category</th>
+            <th>Description</th>
+            <th>Photo</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="adminTable"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<script type="module" src="/js/admin.js"></script>
+</body>
+</html>

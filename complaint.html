@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lodge Complaint — SmartCivic</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+
+<nav class="sc-nav">
+  <div class="sc-nav-brand">
+    <span class="dot"></span>
+    Smart<span class="brand-accent">Civic</span>
+  </div>
+  <div class="sc-nav-actions">
+    <a href="/dashboard.html" class="btn-ghost btn-sm">← Back to Dashboard</a>
+  </div>
+</nav>
+
+<div class="sc-container" style="padding-top:32px; padding-bottom:56px; max-width:720px;">
+
+  <div class="sc-fade-up" style="margin-bottom:28px;">
+    <h1 style="font-size:1.6rem; margin-bottom:6px;">Lodge a Complaint</h1>
+    <p style="font-size:14px; color:var(--slate);">Fill in the details and pin the location on the map. We'll notify the right department.</p>
+  </div>
+
+  <div class="sc-card sc-fade-up" style="animation-delay:0.08s;">
+
+    <div class="sc-field">
+      <label>Issue Category</label>
+      <select id="category">
+        <option>Road Issues</option>
+        <option>Streetlight</option>
+        <option>Garbage / Sanitation</option>
+        <option>Water Leakage</option>
+        <option>Drainage</option>
+        <option>Public Property Damage</option>
+        <option>Illegal Dumping</option>
+        <option>Encroachment</option>
+        <option>Other</option>
+      </select>
+    </div>
+
+    <div class="sc-field">
+      <label>Description</label>
+      <textarea id="description" placeholder="Describe the issue in detail — what you saw, how severe it is, how long it's been there..."></textarea>
+    </div>
+
+    <div class="sc-field">
+      <label>Upload Photo <span style="color:var(--slate); font-weight:400;">(optional)</span></label>
+      <input type="file" id="photo" accept="image/*" style="padding:10px 14px; cursor:pointer;">
+      <p style="font-size:12px; color:var(--slate); margin-top:6px;">Accepted: JPG, PNG, WEBP. Max 5MB.</p>
+    </div>
+
+    <div class="sc-divider"></div>
+
+    <div class="sc-field" style="margin-bottom:8px;">
+      <label>Pin Location on Map</label>
+      <p style="font-size:13px; color:var(--slate); margin-bottom:10px;">Click on the map to select the exact location of the issue</p>
+      <div id="map" style="height:380px; border-radius:var(--radius-lg); overflow:hidden;"></div>
+    </div>
+
+    <p id="selectedLocation" style="font-size:13px; color:var(--amber); min-height:20px; margin-bottom:16px;"></p>
+
+    <button id="submitComplaint" class="btn-primary btn-full btn-lg">
+      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"/>
+      </svg>
+      Submit Complaint
+    </button>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script type="module" src="/js/complaints.js"></script>
+</body>
+</html>

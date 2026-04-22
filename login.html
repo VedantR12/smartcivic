@@ -1,0 +1,43 @@
+<link rel="stylesheet" href="/css/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<div class="sc-center-page">
+  <div style="width:100%; max-width:400px; animation: fadeUp 0.5s cubic-bezier(0.16,1,0.3,1) both;">
+
+    <!-- Brand -->
+    <div style="text-align:center; margin-bottom:36px;">
+      <a href="/" style="display:inline-flex; align-items:center; gap:8px; text-decoration:none; margin-bottom:28px;">
+        <span style="width:10px;height:10px;border-radius:50%;background:var(--amber);box-shadow:0 0 10px var(--amber);display:inline-block;"></span>
+        <span style="font-family:var(--font-display);font-size:1.1rem;font-weight:800;color:var(--white-pure);">Smart<span style="color:var(--amber)">Civic</span></span>
+      </a>
+      <h2 style="font-size:1.6rem; margin-bottom:8px;">Welcome back</h2>
+      <p style="font-size:14px; color:var(--slate);">Sign in to your citizen account</p>
+    </div>
+
+    <div class="sc-card">
+      <div class="sc-field">
+        <label>Email address</label>
+        <input id="email" type="email" placeholder="you@example.com">
+      </div>
+      <div class="sc-field">
+        <label>Password</label>
+        <input id="password" type="password" placeholder="Your password">
+      </div>
+      <div style="margin-top:20px;">
+        <button id="loginBtn" class="btn-primary btn-full btn-lg">Sign In</button>
+      </div>
+      <div style="margin-top:18px; text-align:center; font-size:13px; color:var(--slate);">
+        Don't have an account? <a href="/register.html">Register</a>
+      </div>
+    </div>
+
+    <div style="text-align:center; margin-top:16px;">
+      <a href="/" style="font-size:13px; color:var(--slate);">← Back to home</a>
+    </div>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script type="module" src="/js/auth.js"></script>

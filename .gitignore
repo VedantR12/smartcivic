@@ -1,0 +1,88 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# -----------------------------
+# 🔒 ENV FILES (CRITICAL)
+# -----------------------------
+.env
+.env.*
+*.env
+
+# -----------------------------
+# 🐍 PYTHON
+# -----------------------------
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+
+# -----------------------------
+# 🧪 VIRTUAL ENVIRONMENTS
+# -----------------------------
+venv/
+.env/
+.venv/
+ENV/
+env/
+
+# -----------------------------
+# 📦 FASTAPI / UVICORN
+# -----------------------------
+*.log
+
+# -----------------------------
+# 🗃️ OS FILES
+# -----------------------------
+.DS_Store
+Thumbs.db
+
+# -----------------------------
+# 🧰 IDE / EDITOR
+# -----------------------------
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# -----------------------------
+# 🌐 FRONTEND (if any build tools later)
+# -----------------------------
+node_modules/
+dist/
+build/
+
+# -----------------------------
+# 🔐 SECRET KEYS / CONFIG
+# -----------------------------
+secrets.json
+config.json
+
+# -----------------------------
+# 📸 OPTIONAL UPLOADS (if local)
+# -----------------------------
+uploads/
+media/
