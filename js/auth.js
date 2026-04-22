@@ -2,7 +2,58 @@ import { supabase } from "./supabaseClient.js"
 
 const API = "http://127.0.0.1:8000"
 
-// ─── REGISTER ────────────────────────────────────────────────
+// ─── GOOGLE OAUTH ─────────────────────────────────────────────
+// Handle redirect callback from Google (runs on any auth page)
+supabase.auth.onAuthStateChange(async (event, session) => {
+  if (event === "SIGNED_IN" && session) {
+    localStorage.setItem("sc_token", session.access_token)
+    localStorage.setItem("sc_refresh", session.refresh_token)
+
+    const user = session.user
+
+    // Create user profile if it doesn't exist (Google users won't have one)
+    await fetch(`${API}/user/register`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${session.access_token}`
+      },
+      body: JSON.stringify({
+        id: user.id,
+        name: user.user_metadata?.full_name || user.email.split("@")[0],
+        email: user.email,
+        phone: user.user_metadata?.phone || ""
+      })
+    })
+
+    // Redirect to dashboard
+    window.location.href = "/dashboard.html"
+  }
+})
+
+// Google sign-in button (both login + register pages)
+const googleBtn = document.getElementById("googleBtn")
+if (googleBtn) {
+  googleBtn.addEventListener("click", async () => {
+    googleBtn.disabled = true
+    googleBtn.textContent = "Redirecting..."
+
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/login.html`
+      }
+    })
+
+    if (error) {
+      alert(error.message)
+      googleBtn.disabled = false
+      googleBtn.innerHTML = `<svg width="18" height="18" viewBox="0 0 48 48">...</svg> Continue with Google`
+    }
+  })
+}
+
+// ─── REGISTER ─────────────────────────────────────────────────
 const registerBtn = document.getElementById("registerBtn")
 
 if (registerBtn) {
@@ -37,20 +88,19 @@ if (registerBtn) {
       return
     }
 
-    // Insert profile into users table via backend
     const token = data.session?.access_token
-    const res = await fetch(`${API}/user/register`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
-      },
-      body: JSON.stringify({ name, phone, email, id: user.id })
-    })
-
-    if (!res.ok) {
-      // Fallback: insert directly (first time, session might not exist yet)
-      await supabase.from("users").insert([{ id: user.id, name, phone, email }])
+    if (token) {
+      await fetch(`${API}/user/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({ name, phone, email, id: user.id })
+      })
+    } else {
+      // No session yet (email confirmation required) — insert directly
+      await supabase.from("users").insert([{ id: user.id, name, phone, email, role: "user" }])
     }
 
     alert("Registration successful! Please login.")
@@ -83,7 +133,6 @@ if (loginBtn) {
       return
     }
 
-    // Store token for backend calls
     localStorage.setItem("sc_token", data.session.access_token)
     localStorage.setItem("sc_refresh", data.session.refresh_token)
 

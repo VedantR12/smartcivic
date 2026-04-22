@@ -1,20 +1,26 @@
-/**
- * Shared utility: get auth token and make authenticated API calls.
- * All data goes through backend — no direct Supabase queries from frontend.
- */
-
 import { supabase } from "./supabaseClient.js"
 
 export const API = "http://127.0.0.1:8000"
 
 export async function getToken() {
-  // Try refreshing session from Supabase Auth (source of truth)
-  const { data } = await supabase.auth.getSession()
-  if (data.session) {
+  // refreshSession() always gets a fresh token using the refresh_token
+  // Falls back to getSession() if no refresh token exists
+  const { data, error } = await supabase.auth.refreshSession()
+
+  if (!error && data.session) {
     localStorage.setItem("sc_token", data.session.access_token)
+    localStorage.setItem("sc_refresh", data.session.refresh_token)
     return data.session.access_token
   }
-  return localStorage.getItem("sc_token")
+
+  // Fallback: try existing session
+  const { data: sessionData } = await supabase.auth.getSession()
+  if (sessionData.session) {
+    localStorage.setItem("sc_token", sessionData.session.access_token)
+    return sessionData.session.access_token
+  }
+
+  return null
 }
 
 export async function apiFetch(path, options = {}) {
@@ -33,6 +39,8 @@ export async function apiFetch(path, options = {}) {
   })
 
   if (res.status === 401) {
+    // Token truly invalid — clear and redirect
+    await supabase.auth.signOut()
     localStorage.clear()
     window.location.href = "/login.html"
     return null
@@ -62,6 +70,7 @@ export async function adminFetch(path, options = {}) {
 
   if (res.status === 401 || res.status === 403) {
     localStorage.removeItem("sc_admin_token")
+    localStorage.removeItem("sc_admin_name")
     window.location.href = "/"
     return null
   }
