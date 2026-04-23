@@ -1,6 +1,6 @@
 import { supabase } from "./supabaseClient.js"
 
-export const API = "http://127.0.0.1:8000"
+export const API = "https://smartcivic-ftgp.onrender.com"
 
 export async function getToken() {
   // refreshSession() always gets a fresh token using the refresh_token
