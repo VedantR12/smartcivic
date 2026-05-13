@@ -75,7 +75,7 @@ if (submitBtn) {
     if (photoFile) formData.append("photo", photoFile)
 
     const token = await getToken()
-    const res = await fetch("http://127.0.0.1:8000/complaint", {
+    const res = await fetch("https://smartcivic-ftgp.onrender.com/complaint", {
       method: "POST",
       headers: { "Authorization": `Bearer ${token}` },
       body: formData

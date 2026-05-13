@@ -1,6 +1,6 @@
 import { adminFetch } from "./utils.js"
 
-const API = "http://127.0.0.1:8000"
+const API = "https://smartcivic-ftgp.onrender.com"
 
 // ─── AUTH GUARD ───────────────────────────────────────────────
 const adminToken = localStorage.getItem("sc_admin_token")

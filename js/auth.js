@@ -1,6 +1,6 @@
 import { supabase } from "./supabaseClient.js"
 
-const API = "http://127.0.0.1:8000"
+const API = "https://smartcivic-ftgp.onrender.com"
 
 // ─── GOOGLE OAUTH ─────────────────────────────────────────────
 // Handle redirect callback from Google (runs on any auth page)

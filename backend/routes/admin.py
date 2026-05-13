@@ -15,7 +15,7 @@ SMTP_HOST = os.getenv("SMTP_HOST", "smtp.gmail.com")
 SMTP_PORT = int(os.getenv("SMTP_PORT", 587))
 SMTP_USER = os.getenv("SMTP_USER")
 SMTP_PASS = os.getenv("SMTP_PASS")
-FRONTEND_URL = os.getenv("FRONTEND_URL", "http://127.0.0.1:5500")
+FRONTEND_URL = os.getenv("FRONTEND_URL", "https://smartcivic101.netlify.app/")
 
 
 def send_confirmation_email(to_email: str, complaint_id: str):

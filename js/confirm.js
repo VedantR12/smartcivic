@@ -16,7 +16,7 @@ async function handleConfirmation() {
 
   try {
     const res = await fetch(
-      `http://127.0.0.1:8000/confirm/${compId}?action=${action}`,
+      `https://smartcivic-ftgp.onrender.com/confirm/${compId}?action=${action}`,
       { method: "PUT" }
     )
 
