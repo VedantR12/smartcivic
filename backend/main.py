@@ -22,5 +22,19 @@ def health():
 
 @app.get("/keepalive")
 def keepalive():
-    supabase.table("users").select("id").limit(1).execute()
-    return {"status": "db pinged"}
+
+    response = {
+        "server": "alive",
+        "database": "unknown"
+    }
+
+    try:
+        supabase.table("users").select("id").limit(1).execute()
+
+        response["database"] = "connected"
+
+    except Exception as e:
+        response["database"] = "disconnected"
+        response["error"] = str(e)
+
+    return response
